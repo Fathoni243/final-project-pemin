@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  db-final-project-pemin:
+    container_name: db-final-project-pemin
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_DATABASE: ${DB_DBNAME}
+    ports:
+      - ${DB_PORT}:3306
+    volumes:
+      - volumes-final-project-pemin:/var/lib/mysql
+    networks:
+      - networks-final-project-pemin
+
+  phpmyadmin-final-project-pemin:
+    container_name: phpmyadmin-final-project-pemin
+    image: phpmyadmin:latest
+    environment:
+      PMA_HOST: db-final-project-pemin
+    ports:
+      - 8000:80
+    networks:
+      - networks-final-project-pemin
+
+volumes:
+  volumes-final-project-pemin:
+    name: volumes-final-project-pemin
+
+networks:
+  networks-final-project-pemin:
+    name: networks-final-project-pemin
+    driver: bridge
