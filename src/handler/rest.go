@@ -1,7 +1,9 @@
 package handler
 
 import (
+	"final-project-pemin/database"
 	"final-project-pemin/src/service"
+	"final-project-pemin/util"
 	"log"
 	"net/http"
 	"os"
@@ -42,11 +44,11 @@ func (r *rest) RegisterMiddlewareAndRoutes() {
 		})
 	})
 
-	// r.httpServer.GET("/seeder", func(ctx *gin.Context) {
-	// 	helper.SeederRefresh()
+	r.httpServer.GET("/seeder", func(c *gin.Context) {
+		database.SeederRefresh()
 
-	// 	helper.ResponseSuccessJson(ctx, "seeder success", "")
-	// })
+		util.SuccessResponse(c, http.StatusOK, "seeder success", nil)
+	})
 
 	prodi := r.httpServer.Group("/prodi")
 	{
