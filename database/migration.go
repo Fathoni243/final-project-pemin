@@ -11,12 +11,6 @@ type Migration struct {
 }
 
 func (m *Migration) RunMigration() {
-	m.DB.Migrator().DropTable(
-		&model.Prodi{},
-		&model.Mahasiswa{},
-		&model.MataKuliah{},
-	)
-
 	m.DB.AutoMigrate(
 		&model.Prodi{},
 		&model.Mahasiswa{},
