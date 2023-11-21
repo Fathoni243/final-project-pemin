@@ -4,13 +4,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-
-
-func SuccessResponse(c *gin.Context, code int, message string, data interface{}) {
+func SuccessResponse(c *gin.Context, code int, message string, keyData string, data interface{}) {
 	c.JSON(code, gin.H{
 		"success": true,
 		"message": message,
-		"data":    data,
+		keyData:   data,
 	})
 }
 

@@ -47,7 +47,7 @@ func (r *rest) RegisterMiddlewareAndRoutes() {
 	r.httpServer.GET("/seeder", func(c *gin.Context) {
 		database.SeederRefresh()
 
-		util.SuccessResponse(c, http.StatusOK, "seeder success", nil)
+		util.SuccessResponse(c, http.StatusOK, "seeder success", "data", nil)
 	})
 
 	prodi := r.httpServer.Group("/prodi")
