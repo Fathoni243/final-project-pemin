@@ -2,6 +2,7 @@ package repository
 
 import (
 	"final-project-pemin/src/model"
+	"final-project-pemin/util"
 
 	"gorm.io/gorm"
 )
@@ -29,6 +30,10 @@ func (pr *prodiRepository) GetAll() ([]*model.Prodi, error) {
 		return nil, err
 	}
 
+	err = util.CommitOrRollback(tx)
+	if err != nil {
+		return nil, err
+	}
+
 	return prodis, nil
 }
-

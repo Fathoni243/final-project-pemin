@@ -2,6 +2,7 @@ package handler
 
 import (
 	"final-project-pemin/database"
+	"final-project-pemin/middleware"
 	"final-project-pemin/src/service"
 	"final-project-pemin/util"
 	"log"
@@ -53,6 +54,19 @@ func (r *rest) RegisterMiddlewareAndRoutes() {
 	prodi := r.httpServer.Group("/prodi")
 	{
 		prodi.GET("", r.FindAllProdiHandler)
+	}
+
+	auth := r.httpServer.Group("/auth")
+	{
+		auth.POST("/register", r.RegisterMahasiswa)
+		auth.POST("/login", r.LoginMahasiswa)
+	}
+
+	mahasiswa := r.httpServer.Group("mahasiswa")
+	{
+		mahasiswa.GET("/:nim", r.FindMahasiswaByNIM)
+		mahasiswa.GET("", r.FindAllMahasiswa)
+		mahasiswa.GET("/profile", middleware.ValidateToken(), r.GetProfileMahasiswa)
 	}
 }
 
