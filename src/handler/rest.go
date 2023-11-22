@@ -62,11 +62,16 @@ func (r *rest) RegisterMiddlewareAndRoutes() {
 		auth.POST("/login", r.LoginMahasiswa)
 	}
 
-	mahasiswa := r.httpServer.Group("mahasiswa")
+	mahasiswa := r.httpServer.Group("/mahasiswa")
 	{
 		mahasiswa.GET("/:nim", r.FindMahasiswaByNIM)
 		mahasiswa.GET("", r.FindAllMahasiswa)
 		mahasiswa.GET("/profile", middleware.ValidateToken(), r.GetProfileMahasiswa)
+	}
+
+	mataKuliah := r.httpServer.Group("/matakuliah")
+	{
+		mataKuliah.GET("", r.FindAllMataKuliah)
 	}
 }
 
