@@ -48,10 +48,7 @@ func (r *rest) LoginMahasiswa(c *gin.Context) {
 		return
 	}
 
-	util.SuccessResponse(c, http.StatusOK, "mahasiswa success login", "data", gin.H{
-		"mahasiswa": mahasiswaLogin,
-		"token": tokenJwt,
-	})
+	util.SuccessResponse(c, http.StatusOK, "mahasiswa success login", "token", tokenJwt)
 }
 
 func (r *rest) FindMahasiswaByNIM(c *gin.Context) {
