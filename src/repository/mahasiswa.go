@@ -12,6 +12,8 @@ type (
 		Save(mahasiswa *model.Mahasiswa) (*model.Mahasiswa, error)
 		GetByNIM(nim string) (*model.Mahasiswa, error)
 		GetAll() ([]*model.Mahasiswa, error)
+		SaveMatkul(mahasiswa *model.Mahasiswa, matkul *model.MataKuliah) error
+		DeleteMatkul(mahasiswa *model.Mahasiswa, matkul *model.MataKuliah) error
 	}
 
 	mahasiswaRepository struct {
@@ -45,7 +47,7 @@ func (mr *mahasiswaRepository) GetByNIM(nim string) (*model.Mahasiswa, error) {
 	tx := mr.db.Begin()
 
 	mahasiswa := new(model.Mahasiswa)
-	err := tx.Preload("Prodi").First(mahasiswa, nim).Error
+	err := tx.Preload("Prodi").Preload("MataKuliah").First(mahasiswa, nim).Error
 	if err != nil {
 		return nil, err
 	}
@@ -73,4 +75,36 @@ func (mr *mahasiswaRepository) GetAll() ([]*model.Mahasiswa, error) {
 	}
 
 	return mahasiswas, nil
+}
+
+func (mr *mahasiswaRepository) SaveMatkul(mahasiswa *model.Mahasiswa, matkul *model.MataKuliah) error {
+	tx := mr.db.Begin()
+
+	err := tx.Model(&mahasiswa).Preload("MataKuliah").Association("MataKuliah").Append(matkul)
+	if err != nil {
+		return err
+	}
+
+	err = util.CommitOrRollback(tx)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (mr *mahasiswaRepository) DeleteMatkul(mahasiswa *model.Mahasiswa, matkul *model.MataKuliah) error {
+	tx := mr.db.Begin()
+
+	err := tx.Model(&mahasiswa).Preload("MataKuliah").Association("MataKuliah").Delete(matkul)
+	if err != nil {
+		return err
+	}
+
+	err = util.CommitOrRollback(tx)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

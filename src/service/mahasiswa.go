@@ -5,6 +5,7 @@ import (
 	"final-project-pemin/src/model"
 	"final-project-pemin/src/repository"
 	"final-project-pemin/util"
+	"fmt"
 )
 
 type (
@@ -13,15 +14,21 @@ type (
 		Login(req *model.MahasiswaLoginRequest) (*model.Mahasiswa, error)
 		FindByNIM(nim string) (*model.Mahasiswa, error)
 		FindAll() ([]*model.Mahasiswa, error)
+		SaveMatkul(nim string, mkId int64) (*model.Mahasiswa, error)
+		DeleteMatkul(nim string, mkId int64) (*model.Mahasiswa, error)
 	}
 
 	mahasiswaService struct {
 		mahasiswaRepository repository.IMahasiswaRepository
+		matkulRepository    repository.IMataKuliahRepository
 	}
 )
 
-func NewMahasiswaService(mahasiswaRepository repository.IMahasiswaRepository) IMahasiswaService {
-	return &mahasiswaService{mahasiswaRepository: mahasiswaRepository}
+func NewMahasiswaService(mahasiswaRepository repository.IMahasiswaRepository, matkulRepository repository.IMataKuliahRepository) IMahasiswaService {
+	return &mahasiswaService{
+		mahasiswaRepository: mahasiswaRepository,
+		matkulRepository:    matkulRepository,
+	}
 }
 
 func (ms *mahasiswaService) Create(req *model.MahasiswaInputRequest) (*model.Mahasiswa, error) {
@@ -81,4 +88,44 @@ func (ms *mahasiswaService) FindAll() ([]*model.Mahasiswa, error) {
 	}
 
 	return mahasiswas, nil
+}
+
+func (ms *mahasiswaService) SaveMatkul(nim string, mkId int64) (*model.Mahasiswa, error) {
+	mahasiswa, err := ms.mahasiswaRepository.GetByNIM(nim)
+	if err != nil {
+		return nil, err
+	}
+
+	matkul, err := ms.matkulRepository.GetByID(mkId)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, err
+	}
+
+	err = ms.mahasiswaRepository.SaveMatkul(mahasiswa, matkul)
+	if err != nil {
+		return nil, err
+	}
+
+	return mahasiswa, nil
+}
+
+func (ms *mahasiswaService) DeleteMatkul(nim string, mkId int64) (*model.Mahasiswa, error) {
+	mahasiswa, err := ms.mahasiswaRepository.GetByNIM(nim)
+	if err != nil {
+		return nil, err
+	}
+
+	matkul, err := ms.matkulRepository.GetByID(mkId)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, err
+	}
+
+	err = ms.mahasiswaRepository.DeleteMatkul(mahasiswa, matkul)
+	if err != nil {
+		return nil, err
+	}
+
+	return mahasiswa, nil
 }

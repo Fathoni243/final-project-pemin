@@ -67,6 +67,8 @@ func (r *rest) RegisterMiddlewareAndRoutes() {
 		mahasiswa.GET("/:nim", r.FindMahasiswaByNIM)
 		mahasiswa.GET("", r.FindAllMahasiswa)
 		mahasiswa.GET("/profile", middleware.ValidateToken(), r.GetProfileMahasiswa)
+		mahasiswa.POST("/matakuliah/:mkId", middleware.ValidateToken(), r.SaveMatkulMahasiswa)
+		mahasiswa.PUT("/matakuliah/:mkId", middleware.ValidateToken(), r.DeleteMatkulMahasiswa)
 	}
 
 	mataKuliah := r.httpServer.Group("/matakuliah")

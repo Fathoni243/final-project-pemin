@@ -11,7 +11,7 @@ type Service struct {
 func Init(repository *repository.Repository) *Service {
 	return &Service{
 		Prodi: NewProdiService(repository.Prodi),
-		Mahasiswa: NewMahasiswaService(repository.Mahasiswa),
+		Mahasiswa: NewMahasiswaService(repository.Mahasiswa, repository.MataKuliah),
 		MataKuliah: NewMataKuliahService(repository.MataKuliah),
 	}
 }

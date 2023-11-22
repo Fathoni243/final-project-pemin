@@ -5,6 +5,7 @@ import (
 	"final-project-pemin/src/model"
 	"final-project-pemin/util"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -83,4 +84,42 @@ func (r *rest) GetProfileMahasiswa(c *gin.Context) {
 	}
 
 	util.SuccessResponse(c, http.StatusOK, "success get data mahasiswa", "mahasiswa", mahasiswa)
+}
+
+func (r *rest) SaveMatkulMahasiswa(c *gin.Context) {
+	nimToken := c.MustGet("nim").(string)
+
+	idString := c.Param("mkId")
+	mkId, err := strconv.Atoi(idString)
+	if err != nil {
+		util.FailOrErrorResponse(c, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+
+	mahasiswa, errorSave := r.service.Mahasiswa.SaveMatkul(nimToken, int64(mkId))
+	if err != nil {
+		util.FailOrErrorResponse(c, http.StatusInternalServerError, errorSave.Error(), nil)
+		return
+	}
+
+	util.SuccessResponse(c, http.StatusOK, "success add mata kuliah", "mahasiswa", mahasiswa)
+}
+
+func (r *rest) DeleteMatkulMahasiswa(c *gin.Context) {
+	nimToken := c.MustGet("nim").(string)
+
+	idString := c.Param("mkId")
+	mkId, err := strconv.Atoi(idString)
+	if err != nil {
+		util.FailOrErrorResponse(c, http.StatusInternalServerError, err.Error(), nil)
+		return
+	}
+
+	mahasiswa, errorSave := r.service.Mahasiswa.DeleteMatkul(nimToken, int64(mkId))
+	if err != nil {
+		util.FailOrErrorResponse(c, http.StatusInternalServerError, errorSave.Error(), nil)
+		return
+	}
+
+	util.SuccessResponse(c, http.StatusOK, "success delete mata kuliah", "mahasiswa", mahasiswa)
 }

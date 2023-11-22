@@ -10,6 +10,7 @@ import (
 type (
 	IMataKuliahRepository interface {
 		GetAll() ([]*model.MataKuliah, error)
+		GetByID(id int64) (*model.MataKuliah, error)
 	}
 
 	mataKuliahRepository struct {
@@ -37,4 +38,21 @@ func (mkr *mataKuliahRepository) GetAll() ([]*model.MataKuliah, error) {
 
 	return matakuliahs, nil
 
+}
+
+func (mkr *mataKuliahRepository) GetByID(id int64) (*model.MataKuliah, error) {
+	tx := mkr.db.Begin()
+
+	mataKuliah := new(model.MataKuliah)
+	err := tx.First(mataKuliah, id).Error
+	if err != nil {
+		return nil, err
+	}
+
+	errorCommit := util.CommitOrRollback(tx)
+	if errorCommit != nil {
+		return nil, errorCommit
+	}
+
+	return mataKuliah, nil
 }
