@@ -25,7 +25,7 @@ func (r *rest) RegisterMahasiswa(c *gin.Context) {
 		return
 	}
 
-	util.SuccessResponse(c, http.StatusCreated, "create mahasiswa success", "mahasiswa", newMahasiswa)
+	util.SuccessResponse(c, http.StatusCreated, "create mahasiswa success", "data", newMahasiswa)
 }
 
 func (r *rest) LoginMahasiswa(c *gin.Context) {
@@ -97,7 +97,7 @@ func (r *rest) SaveMatkulMahasiswa(c *gin.Context) {
 	}
 
 	mahasiswa, errorSave := r.service.Mahasiswa.SaveMatkul(nimToken, int64(mkId))
-	if err != nil {
+	if errorSave != nil {
 		util.FailOrErrorResponse(c, http.StatusInternalServerError, errorSave.Error(), nil)
 		return
 	}
@@ -116,7 +116,7 @@ func (r *rest) DeleteMatkulMahasiswa(c *gin.Context) {
 	}
 
 	mahasiswa, errorSave := r.service.Mahasiswa.DeleteMatkul(nimToken, int64(mkId))
-	if err != nil {
+	if errorSave != nil {
 		util.FailOrErrorResponse(c, http.StatusInternalServerError, errorSave.Error(), nil)
 		return
 	}

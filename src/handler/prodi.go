@@ -14,5 +14,5 @@ func (r *rest) FindAllProdiHandler(c *gin.Context) {
 		return
 	}
 
-	util.SuccessResponse(c, http.StatusOK, "grabbed all prodi", "prodis", prodis)
+	util.SuccessResponse(c, http.StatusOK, "grabbed all prodi", "prodi", prodis)
 }

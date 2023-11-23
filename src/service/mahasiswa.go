@@ -6,6 +6,7 @@ import (
 	"final-project-pemin/src/repository"
 	"final-project-pemin/util"
 	"fmt"
+	"strconv"
 )
 
 type (
@@ -42,11 +43,14 @@ func (ms *mahasiswaService) Create(req *model.MahasiswaInputRequest) (*model.Mah
 		return nil, err
 	}
 
+	prodiId, _ := strconv.Atoi(req.ProdiId)
+	angkatan, _ := strconv.Atoi(req.Angkatan)
+
 	mahasiswa := &model.Mahasiswa{
 		NIM:      req.NIM,
-		ProdiId:  req.ProdiId,
+		ProdiId:  int64(prodiId),
 		Nama:     req.Nama,
-		Angkatan: req.Angkatan,
+		Angkatan: int32(angkatan),
 		Password: hashPassword,
 	}
 
@@ -100,6 +104,17 @@ func (ms *mahasiswaService) SaveMatkul(nim string, mkId int64) (*model.Mahasiswa
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil, err
+	}
+
+	var exist bool
+	for _, matkulMhs := range mahasiswa.MataKuliah {
+		if matkulMhs.ID == matkul.ID {
+			exist = true
+		}
+	}
+
+	if exist {
+		return nil, errors.New("Mata kuliah " + matkul.Nama + " sudah ditambahkan")
 	}
 
 	err = ms.mahasiswaRepository.SaveMatkul(mahasiswa, matkul)

@@ -22,7 +22,7 @@ services:
     environment:
       PMA_HOST: db-final-project-pemin
     ports:
-      - 8000:80
+      - 8080:80
     networks:
       - networks-final-project-pemin
 

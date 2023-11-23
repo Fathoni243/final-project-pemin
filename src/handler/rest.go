@@ -24,7 +24,7 @@ func Init(service *service.Service) *rest {
 	r.Use(cors.New(cors.Config{
 		AllowAllOrigins:  true,
 		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE"},
-		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "Authorization"},
+		AllowHeaders:     []string{"Origin", "Content-Length", "Content-Type", "token"},
 		AllowCredentials: true,
 	}))
 
@@ -45,7 +45,7 @@ func (r *rest) RegisterMiddlewareAndRoutes() {
 		})
 	})
 
-	r.httpServer.GET("/seeder", func(c *gin.Context) {
+	r.httpServer.POST("/seeder", func(c *gin.Context) {
 		database.SeederRefresh()
 
 		util.SuccessResponse(c, http.StatusOK, "seeder success", "data", nil)

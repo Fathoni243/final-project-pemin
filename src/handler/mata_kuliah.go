@@ -14,5 +14,5 @@ func (r *rest) FindAllMataKuliah(c *gin.Context) {
 		return
 	}
 
-	util.SuccessResponse(c, http.StatusOK, "grabbed all matakuliah", "matakuliahs", matakuliahs)
+	util.SuccessResponse(c, http.StatusOK, "grabbed all matakuliah", "matakuliah", matakuliahs)
 }
